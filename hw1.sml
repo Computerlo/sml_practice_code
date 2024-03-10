@@ -86,5 +86,3 @@ fun oldest(dates : (int * int * int) list) =
   in
       SOME (oldest_nonempty dates)	   
   end
-	   
-	   
