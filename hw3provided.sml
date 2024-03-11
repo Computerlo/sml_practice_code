@@ -90,38 +90,3 @@ names are not relevant. Hints: The sample solution uses two helper functions. Th
 pattern and returns a list of all the strings it uses for variables. Using foldl with a function that uses
 @ is useful in one case. The second takes a list of strings and decides if it has repeats. List.exists may
 be useful. Sample solution is 15*)
-
-fun check_pat p =
-	let fun helper1 p =
-		case p of 
-		Variable x => [x]
-		| TupleP ps         => List.foldl (fn (ptn, i) => i @ helper1 ptn) [] ps
-		| ConstructorP(_,p) => helper1 p 
-		| _                 => []
-
-		fun helper2 p =
-		case p of 
-		[] => false 
-		| head::tail => List.exists (fn x=> head = x) tail 
-
-	in not ((helper2 o helper1) p) 
-	end 
-
-fun match (va, ptn) =
-  case (va, ptn) of
-      (_, Wildcard) => SOME []
-   |  (v, Variable str) => SOME [(str, v)]
-   |  (Unit, UnitP) => SOME []
-   | (Const v, ConstP i) =>  if v = i then SOME [] else NONE
-   | (Tuple vs, TupleP ps) =>  if List.length vs = List.length ps
-				then all_answers match (ListPair.zip(vs, ps))
-				else NONE
-   | (Constructor(s', v), ConstructorP(s'', p)) => if s' = s''
-						 then match (v, p)
-						 else NONE
-   | (_ , _) => NONE
-
-
-fun first_match va ptns = 
-  SOME (first_answer (fn x => match(va, x)) ptns)
-  handle NoAnswer => NONE

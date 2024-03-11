@@ -110,3 +110,4 @@ fun score (card_list, goal) =
       then prelim_score div 2
       else prelim_score	       
   end
+
